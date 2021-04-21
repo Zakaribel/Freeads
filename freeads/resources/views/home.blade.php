@@ -14,11 +14,18 @@
                         </div>
                     @endif
 
-                    {{ __('You are logged in!') }}
+                   
                 </div>
             </div>
         </div>
     </div>
+
+    @if(session()->has('success'))
+    <div class="alert alert-success">
+        {{ session()->get('success') }}
+    </div>
+@endif
+
 
     <form action="{{route('emailEdit')}}" method="POST">
     

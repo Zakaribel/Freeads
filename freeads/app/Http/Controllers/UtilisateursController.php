@@ -57,14 +57,17 @@ class UtilisateursController extends Controller
     }
 
     public function emailEdit(Request $request){
-             var_dump($request->email);
+        $user = auth()->user();
+
         $affected = DB::table('users')
-              ->where('id', $request->id)
+              ->where('id', $user->id)
               ->update(['email' => $request->email]);
 
-           
+              return redirect(route('register'))->with('success','email modified');
 
     }
+
+
  
     
 
