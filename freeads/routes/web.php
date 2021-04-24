@@ -3,6 +3,8 @@
 use App\Http\Controllers\UtilisateursController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+use App\Models\Annonce;
 
 
 /*
@@ -26,35 +28,29 @@ Route::get('/index', function () {
 
 
 Route::get('/register', 'App\Http\Controllers\UtilisateursController@createUtilisateursForm');
-Route::post('register', 'App\Http\Controllers\UtilisateursController@utilisateursForm')->name('register');
+Route::post('/register', 'App\Http\Controllers\UtilisateursController@utilisateursForm')->name('register');
 Route::get('/login', 'App\Http\Controllers\UtilisateursController@login');
-Route::post('login', 'App\Http\Controllers\UtilisateursController@validateLogin')->name('login');
+Route::post('/login', 'App\Http\Controllers\UtilisateursController@validateLogin')->name('login');
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+Route::post('/home/emailEdit', 'App\Http\Controllers\UtilisateursController@emailEdit')->middleware('auth')->name('emailEdit');
 
-Route::post('home', 'App\Http\Controllers\UtilisateursController@emailEdit')->name('emailEdit');
+
+Route::get('/createArticle', 'App\Http\Controllers\AnnoncesController@createArticle')->middleware('auth')->name('createArticle');
+Route::post('/createArticle', 'App\Http\Controllers\AnnoncesController@articleForm')->middleware('auth');
+Route::get('/articleEdit','App\Http\Controllers\AnnoncesController@displayArticleEdit')->name('articleEdit');
+Route::post('/articleEdit','App\Http\Controllers\AnnoncesController@modifyArticle')->name('articleEdit');
+
+Route::get('/articleDelete','App\Http\Controllers\AnnoncesController@deleteArticle')->name('articleDelete');
+
+
 
 Route::get('/logout', 'App\Http\Controllers\UtilisateursController@logout')->name('logout');
+Route::get('/email/verify/{id}/{hash}', 'App\Http\Controllers\UtilisateursController@verification')->middleware(['auth', 'signed'])->name('verification.verify');
+Route::post('/email/verification-notification', 'App\Http\Controllers\UtilisateursController@verificationNotif')->middleware(['auth', 'throttle:6,1'])->name('verification.send');
 
-Route::get('/email/verify', function () {
-    return view('auth.verify-email');
-})->middleware('auth')->name('verification.notice');
 
-use Illuminate\Foundation\Auth\EmailVerificationRequest;
+Route::get('/Articles', function(){
 
-Route::get('/email/verify/{id}/{hash}', function (EmailVerificationRequest $request) {
-    $request->fulfill();
-
-    return redirect('/home');
-})->middleware(['auth', 'signed'])->name('verification.verify');
-
-use Illuminate\Http\Request;
-
-Route::post('/email/verification-notification', function (Request $request) {
-    $request->user()->sendEmailVerificationNotification();
-
-    return back()->with('message', 'Verification link sent!');
-})->middleware(['auth', 'throttle:6,1'])->name('verification.send');
-
-Route::get('/profile', function () {
-    // Only verified users may access this route...
-})->middleware('verified');
+    $annonces = Annonce::all();
+    return view('Articles', ['annonces' => $annonces]);
+})->name('showArticles');

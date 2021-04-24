@@ -2,7 +2,25 @@
 
 @section('content')
 <div class="container">
-    <div class="row justify-content-center">
+                              
+
+        @if(session()->has('failed'))
+    <div class="alert alert-danger" style="text-align: center;">
+        {{ session()->get('failed') }}
+    </div>
+@endif
+
+@if(session()->has('success'))
+    <div class="alert alert-success" style="text-align: center;">
+        {{ session()->get('success') }}
+    </div>
+@endif
+   
+
+
+<br><br>
+    <div class="row justify-content-center" >
+
         <div class="col-md-8">
             <div class="card">
                 <div class="card-header">{{ __('Login') }}</div>
