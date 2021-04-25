@@ -33,6 +33,7 @@ Route::get('/login', 'App\Http\Controllers\UtilisateursController@login');
 Route::post('/login', 'App\Http\Controllers\UtilisateursController@validateLogin')->name('login');
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 Route::post('/home/emailEdit', 'App\Http\Controllers\UtilisateursController@emailEdit')->middleware('auth')->name('emailEdit');
+Route::get('/', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
 
 Route::get('/createArticle', 'App\Http\Controllers\AnnoncesController@createArticle')->middleware('auth')->name('createArticle');

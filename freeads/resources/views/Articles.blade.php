@@ -28,7 +28,6 @@
                 <div class="card">
                 <label style="height: 100px;margin-top:1%;text-align:center"><b> Description :</b> <br><br> {{$value->description}} </label>
                 <div style="text-align: center;">
-                {{ public_path('public/img/').$value->photo }}
                  <img src="{{ public_path('img/').$value->photo }}" height="100px" width="200px" >
                  </div>
 
